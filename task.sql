@@ -20,16 +20,17 @@ CREATE TABLE Products (
   Name VARCHAR(100) NOT NULL
 );
 
+-- Оновлена структура ProductInventory з ID
 CREATE TABLE ProductInventory (
+  ID INT PRIMARY KEY AUTO_INCREMENT,
   ProductID INT NOT NULL,
   WarehouseID INT NOT NULL,
   Amount INT NOT NULL,
-  PRIMARY KEY (ProductID, WarehouseID),
   FOREIGN KEY (ProductID) REFERENCES Products(ID),
   FOREIGN KEY (WarehouseID) REFERENCES Warehouses(ID)
 );
 
--- Додавання тестових даних
+-- Оновлені INSERT-записи
 INSERT INTO Countries (ID, Name) VALUES 
 (1, 'USA'),
 (2, 'Canada');
@@ -42,8 +43,9 @@ INSERT INTO Products (ID, Name) VALUES
 (1, 'iPhone 13'),
 (2, 'Samsung Galaxy S21');
 
-INSERT INTO ProductInventory (ProductID, WarehouseID, Amount) VALUES 
-(1, 1, 100),
-(2, 1, 50),
-(1, 2, 200),
-(2, 2, 150);
+-- Додаємо ID в INSERT
+INSERT INTO ProductInventory (ID, ProductID, WarehouseID, Amount) VALUES 
+(1, 1, 1, 100),
+(2, 2, 1, 50),
+(3, 1, 2, 200),
+(4, 2, 2, 150);
