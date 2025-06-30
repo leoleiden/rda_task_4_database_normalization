@@ -1,33 +1,49 @@
--- Create database and tables
-
+DROP DATABASE IF EXISTS ShopDB;
 CREATE DATABASE ShopDB;
 USE ShopDB;
 
 CREATE TABLE Countries (
-    ID INT,
-    Name VARCHAR(50),
-    PRIMARY KEY (ID)
+  ID INT PRIMARY KEY AUTO_INCREMENT,
+  Name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Warehouses (
+  ID INT PRIMARY KEY AUTO_INCREMENT,
+  Name VARCHAR(100) NOT NULL,
+  Address VARCHAR(255) NOT NULL,
+  CountryID INT NOT NULL,
+  FOREIGN KEY (CountryID) REFERENCES Countries(ID)
+);
+
+CREATE TABLE Products (
+  ID INT PRIMARY KEY AUTO_INCREMENT,
+  Name VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE ProductInventory (
-    ID INT,
-    ProductName VARCHAR(50),
-    WarehouseAmount INT,
-    WarehouseName VARCHAR(50),
-    WarehouseAddress VARCHAR(50), 
-    CountryID INT,
-	FOREIGN KEY (CountryID) REFERENCES Countries(ID) ON DELETE NO ACTION,
-    PRIMARY KEY (ID)
+  ProductID INT NOT NULL,
+  WarehouseID INT NOT NULL,
+  Amount INT NOT NULL,
+  PRIMARY KEY (ProductID, WarehouseID),
+  FOREIGN KEY (ProductID) REFERENCES Products(ID),
+  FOREIGN KEY (WarehouseID) REFERENCES Warehouses(ID)
 );
 
--- Populate test data
+-- Додавання тестових даних
+INSERT INTO Countries (ID, Name) VALUES 
+(1, 'USA'),
+(2, 'Canada');
 
-INSERT INTO Countries (ID,Name)
-	VALUES (1, 'Country1');
-INSERT INTO Countries (ID,Name)
-	VALUES (2, 'Country2');
-    
-INSERT INTO ProductInventory (ID,ProductName,WarehouseAmount,WarehouseName,WarehouseAddress,CountryID)
-	VALUES (1, 'AwersomeProduct', 2, 'Warehouse-1', 'City-1, Street-1',1);
-INSERT INTO ProductInventory (ID,ProductName,WarehouseAmount,WarehouseName,WarehouseAddress,CountryID)
-	VALUES (2, 'AwersomeProduct', 5, 'Warehouse-2', 'City-2, Street-2',2);
+INSERT INTO Warehouses (ID, Name, Address, CountryID) VALUES 
+(1, 'Main Warehouse', '1234 Warehouse Ave', 1),
+(2, 'Secondary Warehouse', '5678 Storage St', 2);
+
+INSERT INTO Products (ID, Name) VALUES 
+(1, 'iPhone 13'),
+(2, 'Samsung Galaxy S21');
+
+INSERT INTO ProductInventory (ProductID, WarehouseID, Amount) VALUES 
+(1, 1, 100),
+(2, 1, 50),
+(1, 2, 200),
+(2, 2, 150);
